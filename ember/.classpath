@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="patch"/>
+	<classpathentry kind="src" path="tools"/>
+	<classpathentry kind="src" path="junk"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="jar/gluegen.jar" sourcepath="jogamp/gluegen-java-src.zip"/>
+	<classpathentry kind="lib" path="jar/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="jar/jbullet.jar"/>
+	<classpathentry kind="lib" path="jar/jinput.jar"/>
+	<classpathentry kind="lib" path="jar/jna.jar"/>
+	<classpathentry kind="lib" path="jar/joal.jar" sourcepath="jogamp/joal-java-src.zip"/>
+	<classpathentry kind="lib" path="jar/jogl.all.jar" sourcepath="jogamp/jogl-java-src.zip"/>
+	<classpathentry kind="lib" path="jar/mysql-connector-java-5.1.17-bin.jar"/>
+	<classpathentry kind="lib" path="jar/vecmath.jar"/>
+	<classpathentry kind="lib" path="jar/jarnbjo.jar"/>
+	<classpathentry kind="lib" path="jar/stack-alloc.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

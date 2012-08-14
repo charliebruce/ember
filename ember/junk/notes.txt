@@ -1,0 +1,10 @@
+Fix in game:
+Normals
+Load order
+Spatial Streams
+
+
+
+Add:
+Character Controller 
+Light
