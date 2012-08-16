@@ -31,6 +31,7 @@ public class XInputXboxController implements Gamepad {
 	 */
 	public float lt=0.0f,rt=0.0f;
 	
+	public float[] axes = new float[4];
 	
 	/**
 	 * Obtain the latest information from the controller.
@@ -46,10 +47,11 @@ public class XInputXboxController implements Gamepad {
 		//TODO read axes
 		lt=sb.get()*XInput.recipMaxTriggerTravel;
 		rt=sb.get()*XInput.recipMaxTriggerTravel;
-		//lx=sb.get();
-		//ly=sb.get();
-		//rx=sb.get();
-		//ry=sb.get();
+		
+		axes[0]=sb.get(); //Left stick, left-right -32768->32768.
+		axes[1]=sb.get();
+		axes[2]=sb.get();
+		axes[3]=sb.get();
 
 		//if((lx*lx+ly*ly)<XInput.XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE_SQUARED){
 			//Deadzone says no.
@@ -177,5 +179,37 @@ public class XInputXboxController implements Gamepad {
 				((buttons&XInput.BUTTON_START)!=0),
 				((buttons&XInput.BUTTON_BACK)!=0)
 		};
+	}
+
+	@Override
+	public float getForward() {
+		float travel = XInput.recipMaxTravel*axes[1];
+		if(travel*travel < 0.05)
+		return 0;
+		else return travel;
+	}
+
+	@Override
+	public float getRight() {
+		float travel = XInput.recipMaxTravel*axes[0];
+		if(travel*travel < 0.05)
+		return 0;
+		else return travel;
+	}
+
+	@Override
+	public float getLookRight() {
+		float travel = XInput.recipMaxTravel*axes[2];
+		if(travel*travel < 0.05)
+		return 0;
+		else return travel;
+	}
+
+	@Override
+	public float getLookUp() {
+		float travel = XInput.recipMaxTravel*axes[3];
+		if(travel*travel < 0.05)
+		return 0;
+		else return travel;
 	}
 }

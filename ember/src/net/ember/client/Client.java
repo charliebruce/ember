@@ -141,7 +141,7 @@ public class Client {
 		Physics.init();
 		World.init();
 		
-		//Sound.playMusicToCompletion("nonfree/Haven Forest.ogg");
+		Sound.playMusicToCompletion("nonfree/Haven Forest.ogg");
 		
 		
 		while(!Client.loadManager.idle()){

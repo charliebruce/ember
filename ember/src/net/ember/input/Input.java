@@ -50,6 +50,8 @@ public class Input {
 	
 	//To save regular object allocations.
 	static private Vector3f temp = new Vector3f();
+	static private Vector3f temp1 = new Vector3f();
+	static private Vector3f temp2 = new Vector3f();
 	
 	
 	/**
@@ -75,7 +77,7 @@ public class Input {
 
 
 		if(keyListener.keys[KeyBinding.keyboardQuit]||gamepadButtons[KeyBinding.controllerQuit]){
-			Log.info("Quitting.");
+			Log.info("Quitting due to key press.");
 			Client.quitUrgent();
 		}
 		
@@ -108,6 +110,46 @@ public class Input {
 			Graphics.camera.position.add(temp);
 		}
 		
+		/**
+		 * If they aren't using the keyboard we also poll the joystick.
+		 */
+		if(!keyListener.keys[KeyBinding.keyboardForward]&&!keyListener.keys[KeyBinding.keyboardBackward]&&!keyListener.keys[KeyBinding.keyboardRight]&&!keyListener.keys[KeyBinding.keyboardLeft]){
+			
+			
+			//Find the horizontal component of the camera's view direction.
+			temp.set(Graphics.camera.getViewDirection());
+			temp.y=0.0f;
+			temp.normalize();
+			
+			//Find out which way is right.
+			temp1.set(0.0f,1.0f,0.0f);
+			temp1.cross(temp1, temp); 
+			
+			
+			float fwd = gamepad.getForward();
+			float right = gamepad.getRight();
+			
+			temp.scale(fwd*0.02f);
+			temp1.scale(right*-0.02f); //-ve because FUCK YOU that's why. Seriously. The gamepad gets it right, is my entire world mirrored or is the cross product wrong?
+			
+			temp2.add(temp, temp1);
+			
+			World.player.movement.set(temp2);
+			
+			
+			float azi = Graphics.camera.getAzimuth() + gamepad.getLookRight() * 0.05f;
+			float ele = Graphics.camera.getElevation() + gamepad.getLookUp() * 0.05f;
+			
+			//These are already hard limits in the camera code. This should just be used to make angle changing smoother - base it such that dElevation = k dDistanceToEdge
+			final float MIN_ELE = 1.4f;
+			final float MAX_ELE = 3.14f;
+			if(ele<MIN_ELE) ele = MIN_ELE;//Lock to horizontal or above
+			if(ele>MAX_ELE) ele = MAX_ELE; //Lock to just below vertical
+			Graphics.camera.setOrientation(azi, ele);
+			
+			Log.debug("Elevation: "+ele);
+			
+		}
 		
 		
 		
@@ -120,6 +162,10 @@ public class Input {
 		{
 			World.player.jump();
 		}
+		
+		
+		
+		
 		
 		
 		Graphics.camera.setOrientation(Graphics.camera.getAzimuth()+keyListener.pixx*0.00005f, Graphics.camera.getElevation()+keyListener.pixy*0.00005f);

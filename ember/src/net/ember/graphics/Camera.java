@@ -166,8 +166,8 @@ public class Camera extends Entity {
 		rebuildFrustrumPlanes=true;
 		azimuth = azi;
 		elevation = ele;
-		if(ele>(Math.PI/2.0)) ele=(float) (Math.PI/2.0);
-		if(ele<0.001f) ele=0.001f;
+		if(ele<(Math.PI/2.0)) ele=(float) (Math.PI/2.0);
+		if(ele>Math.PI) ele=3.141f;
 		float num = (float) (azimuth%(2*Math.PI));//keep precision by preventing massive rotation
 		azimuth = num;
 

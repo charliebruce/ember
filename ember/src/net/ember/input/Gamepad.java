@@ -33,4 +33,24 @@ public interface Gamepad {
 	 * @return
 	 */
 	abstract boolean[] getButtons();
+
+	/**
+	 * Get the magnitude of the left joystick in the Forwards direction.
+	 * From -1.0f to 1.0f
+	 * 
+	 * Deadzone IS implemented
+	 * @return
+	 */
+	abstract float getForward();
+	
+	/**
+	 * Get the magnitude of the left joystick in the Right direction.
+	 * From -1.0f to 1.0f
+	 * 
+	 * Deadzone IS implemented
+	 * @return
+	 */
+	abstract float getRight();
+
+	abstract float getLookRight();	abstract float getLookUp();
 }

@@ -89,12 +89,12 @@ public class Renderer implements GLEventListener {
 	public int nullAlbedoTexture;
 	public int nullNormalTexture;
 
-	@Override
-	public void display(GLAutoDrawable arg0) {
-		GL3 gl = arg0.getGL().getGL3();
-		//GLUtils.capture(gl);
 
-		//renderLoadingScreen(gl);
+	@Override
+	public void display(GLAutoDrawable glad) {
+		GL3 gl = glad.getGL().getGL3();
+
+		//Distinctive red-brown sky.
 		gl.glClearColor(0.5f,0.3f,0.2f,0.0f);
 		gl.glClear (GL3.GL_COLOR_BUFFER_BIT | GL3.GL_DEPTH_BUFFER_BIT);
 		//gl.glEnable(GL.GL_DEPTH_TEST);
@@ -109,6 +109,32 @@ public class Renderer implements GLEventListener {
 		{deferredPipeline(gl);}
 		else
 		{preloadScreen(gl);}
+		
+		/**
+		 * Determine which render pipeline we're using and render.
+		 */
+		
+		//Low Spec - low-end PCs.
+		//High priority lights, ugly alpha blending, cheap water, low-res textures.
+		
+		
+		//Medium-spec - mid-range PCs and Ouya.
+		//High and medium priority lights, nicer alpha blending, higher res textures, nicer meshes.
+		
+		//High-spec - higher-end PCs, future devices.
+		//All lights, nice alpha. Deferred pipeline, maximum resolution everything, pretty water, DoF etc?
+		
+		/**
+		 * Overlay, UI, messages
+		 */
+		
+		
+		
+		
+		/**
+		 * Menus
+		 */
+		
 		//Upload set number of textures/datas this frame (spread out for performance)
 		//uploadData(gl);
 
@@ -167,7 +193,7 @@ public class Renderer implements GLEventListener {
 		//To minimise overdraw, order: Player, skeletons, props, world.
 
 
-		//For each object send the viewing matrices.
+		//For each object send the viewing matrices. Front to back ordering to reduce fragment operations.
 
 		//Identity (no model transform):
 		float[] viewProjection = Matrix.multMatrix(Graphics.camera.projection(), Graphics.camera.transformation());
@@ -583,17 +609,17 @@ public class Renderer implements GLEventListener {
 	void loadTextureData(String filename, int textureId, GL gl){
 		Log.info("Loading "+filename);
 		try {
-			Log.info("error code entering loadTextureData is "+gl.glGetError());
-
+			//assertNoError(gl);
+			
 			gl.glBindTexture(GL.GL_TEXTURE_2D, textureId);
-			Log.info("error code after bind is "+gl.glGetError());
-
+			//Renderer.assertNoError(gl);
+			
 			gl.glTexParameterf(GL.GL_TEXTURE_2D, GL3.GL_TEXTURE_MIN_FILTER, GL3.GL_LINEAR_MIPMAP_LINEAR);//Default to GL_Nearest for performance. GL_Linear bilerps
 			gl.glTexParameterf(GL.GL_TEXTURE_2D, GL3.GL_TEXTURE_MAG_FILTER, GL3.GL_LINEAR);//Other option is to GL_NEAREST it up and clip to nearest pixel
 			//gl.glTexParameterf(GL.GL_TEXTURE_2D, GL3.GL_GENERATE_MIPMAP, GL.GL_TRUE);
 
-			Log.info("error code after params is "+gl.glGetError());
-
+			//Renderer.assertNoError(gl);
+			
 			RandomAccessFile file;
 			try{
 			file = Filesystem.get(filename);
@@ -618,13 +644,13 @@ public class Renderer implements GLEventListener {
 			//}else{
 				TextureData d = TextureIO.newTextureData(gl.getGLProfile(), fis, true, filename.substring(filename.length()-3, filename.length()));
 				gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, d.getInternalFormat(), d.getWidth(), d.getHeight(), 0, d.getPixelFormat(), GL.GL_UNSIGNED_BYTE, d.getBuffer());
-				Log.info("error code after ti2d is "+gl.glGetError());
-
+				//assertNoError(gl);
+				
 			//}
 
 			gl.glGenerateMipmap(GL3.GL_TEXTURE_2D);
-			Log.info("error code after mip is "+gl.glGetError());
-
+			assertNoError(gl);
+			
 		} catch (IOException e1) {
 			Log.warn("Unable to load texture: "+e1.getMessage());
 			e1.printStackTrace();
@@ -722,7 +748,23 @@ public class Renderer implements GLEventListener {
 	}
 	
 	
-	
+	public static void assertNoError(GL gl){
+		int i=0;
+		while((i=gl.glGetError())!=0){
+			switch(i){
+			case GL.GL_INVALID_ENUM:
+				Log.warn("OpenGL threw an invalid enum error.");
+				return;
+			case GL.GL_INVALID_OPERATION:
+				Log.warn("OpenGL threw an invalid operation error.");
+				return;
+			case GL.GL_INVALID_VALUE:
+				Log.warn("openGL threw an invalid value error.");
+				return;
+			}
+		}
+		
+	}
 	
 	
 	
