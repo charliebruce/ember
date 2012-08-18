@@ -147,7 +147,6 @@ public class Input {
 			if(ele>MAX_ELE) ele = MAX_ELE; //Lock to just below vertical
 			Graphics.camera.setOrientation(azi, ele);
 			
-			Log.debug("Elevation: "+ele);
 			
 		}
 		

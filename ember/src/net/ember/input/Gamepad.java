@@ -24,6 +24,10 @@ public interface Gamepad {
 	 */
 	abstract void checkStatus();
 	
+	/**
+	 * Is the controller available to receive data?
+	 * @return True if connected, False otherwise.
+	 */
 	abstract boolean isConnected();
 
 	/**

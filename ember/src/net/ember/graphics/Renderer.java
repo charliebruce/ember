@@ -265,11 +265,14 @@ public class Renderer implements GLEventListener {
 		gl.glUseProgram(Shaders.simpleLightShader.id);
 
 		
+		gl.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
+
+		
 		gl.glBindBuffer(GL.GL_ARRAY_BUFFER,  fsvbo);
 		gl.glVertexAttribPointer(Shaders.simpleLightShader.vertexLocation, 2, GL.GL_FLOAT, false, 0,0);//2=xy,0,0/no stride, no offset
 		gl.glEnableVertexAttribArray(Shaders.simpleLightShader.vertexLocation);
 
-		//gl.glDrawArrays(GL.GL_TRIANGLES, 0, 6);
+		gl.glDrawArrays(GL.GL_TRIANGLES, 0, 6);
 		
 		
 
@@ -277,10 +280,9 @@ public class Renderer implements GLEventListener {
 		 * Post-process effects, overlays, output stage.
 		 */
 
-		gl.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
+		
 
-
-		renderDebugScreen(gl);
+		//renderDebugScreen(gl);
 
 	}
 

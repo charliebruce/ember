@@ -54,6 +54,16 @@ public class Client {
 	 */
 	public static DownloadManager downloadManager;
 	private static Thread downloadManagerThread;
+	
+	
+	
+	/**
+	 * Target Frame Rate
+	 */
+	public static final int TARGET_FPS = 60;
+	public static final float FRAME_TIME = 1.0f/TARGET_FPS;
+	
+	
 	/**
 	 * Initialise the game engine.
 	 */
@@ -226,7 +236,7 @@ public class Client {
 			/**
 			 * Ensure that background caching of sound, graphics and download data is going OK 
 			 */
-			
+			//TODO this
 			
 			/**
 			 * Now we switch the buffers to make everything visible. This stalls the thread 
@@ -241,7 +251,7 @@ public class Client {
 			if((t2/1000000)>18){
 				Log.warn("Frame took longer than expected. Breakdown:"+ frametime+"ms: Physics "+(phystime-ppt)/1000000+"."+((phystime-ppt)/100000)%10+"ms, World "+(worldtime-phystime)/1000000+"."+ ((worldtime-phystime)/100000)%10+"ms. Total to sync: "+(t2)/1000000+"ms");
 			}
-			//This creates massive judder.
+			//This creates massive judder, setting the title seems to take a while.
 			//window.setTitle("Ember: "+ frametime+"ms: Physics "+(phystime-ppt)/1000000+"."+((phystime-ppt)/100000)%10+"ms World "+(worldtime-phystime)/1000000+"."+ ((worldtime-phystime)/100000)%10+"ms Sync "+(t2)/1000000);
 		}
 		
@@ -265,6 +275,14 @@ public class Client {
 	 * Immediately terminate the main game loop. 
 	 */
 	public static void quitUrgent(){
+		mainThreadRunning = false;
+	}
+	
+	/**
+	 * Safer shutdown of the engine.
+	 */
+	public static void quitNonUrgent(){
+		//TODO save the game and states first.
 		mainThreadRunning = false;
 	}
 
