@@ -1,0 +1,11 @@
+#version 120
+
+
+//Light vertex shader - for light geometry.
+
+
+void main(){
+
+
+
+}

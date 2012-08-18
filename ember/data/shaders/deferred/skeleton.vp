@@ -1,0 +1,47 @@
+#version 120
+
+//On-GPU mesh skinning implementation.
+//Limits 4 weights per vertex
+//Also MAX_UNIFORM_COMPONENTS must be > (12*weights + constant uniforms)
+
+//Standard information
+attribute vec3 vertexin;
+attribute vec3 normalin;
+attribute vec2 texcoordin;
+attribute vec3 tangentin;
+
+//Weight coefficients and indices
+attribute vec4 windicesin;
+//Note we could use vec3, if x+y+z<1, w=1-x-y-z
+//Memory is cheaper than processor, so nope.
+attribute vec4 weightsin;
+
+//4x3 is fine but this is easy. Provided MAX_UNIFORM_COMPONENTS is OK with this, ignore it?
+//Bone transformations
+uniform mat4[] bones;
+
+//Viewing information
+uniform mat4 mvp;
+uniform mat3 normalmatrix;
+
+
+varying vec2 texcoord;
+varying vec3 norm;
+varying vec4 tangent;
+
+
+void main(){
+
+mat4 xform = bones[(int)windicesin.x]*weightsin.x;
+xform+= bones[(int)windicesin.y]*weightsin.y;
+xform+= bones[(int)windicesin.z]*weightsin.z;
+xform+= bones[(int)windicesin.w]*weightsin.w;
+
+texcoord=texcoordin;
+norm=normalize(xform*vec4(normalin,0.0f));
+gl_Position=mvp*xform*vec4(vertexin,1.0);
+
+
+
+
+}

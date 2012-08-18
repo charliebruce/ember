@@ -1,0 +1,8 @@
+#version 120
+
+//Light vertex program - full-screen quad.
+
+void main(){
+
+
+}

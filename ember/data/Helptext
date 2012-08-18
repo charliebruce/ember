@@ -1,0 +1,22 @@
+
+
+Explanations for help/menus/options
+
+
+Lighting
+Simple lighting uses a basic mathematical model which is fast but may look unusual on some materials, and does not handle reflections from shiny materials. Only recommended for machines with very limited graphics cards.
+Phong lighting uses a slightly more advanced model which accounts for reflections from shiny materials.
+Half-Lambert uses a more advanced model which most accurately simulates real-life lighting.
+
+Normal Mapping
+Normal Mapping uses an additional image per material which adds more detail to lighting and reflections. Unless on a system with very limited memory or performance, normal mapping should be enabled.
+
+SSAO
+SSAO uses information about depth and surfaces to darken areas of the world which wouldn't normally receive as much light. This is seen in corners and under objects. The effect is quite processor-intensive, so unless your graphics card is fairly powerful this should not be enabled.
+
+Shadows
+Baked lighting pre-generates all shadows for the world before an area can be played. This method creates realistic static shadows but does not give moving objects shadows by the same method.
+Real-time lighting is more intensive but features full shadows for moving objects and looks more natural.
+
+FOV
+Field of Vision is the horizontal angle through which you can see. A wider FOV means that more of the scene can be seen, at a minor cost to performance. Usually, the closer you are to a screen the wider the FOV will need to be to avoid motion sickness or other side effects. Angles greater than 100 may look distorted however.

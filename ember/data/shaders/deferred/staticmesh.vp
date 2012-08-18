@@ -1,0 +1,24 @@
+#version 150
+
+//Deferred shading - Vertex
+
+attribute vec3 vertexin;
+attribute vec3 normalin;
+attribute vec2 texcoordin;
+attribute vec4 tangentin;
+
+uniform mat4 mvp;
+uniform mat3 normalmatrix;
+
+//TODO transform multiplications should be done in here not CPU?
+
+varying vec2 texcoord;
+varying vec3 norm;
+varying vec4 tangent;
+
+void main(){
+	texcoord = texcoordin.xy;
+	norm = normalize(normalmatrix*normalin.xyz);
+	tangent = vec4(normalize(normalmatrix*tangentin.xyz),1.0);
+	gl_Position=mvp*vec4(vertexin,1.0f);//vec4(vertexin.xz,1.0f,1.0)*vec4(0.005f,0.005f,1.0f,1.0f);
+}

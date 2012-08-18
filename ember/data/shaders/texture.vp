@@ -1,0 +1,17 @@
+#version 150
+
+//The input vectors - this is just a simple 2D square.
+attribute vec2 vertexin;
+
+//Position and dimensions on screen
+uniform vec4 posdim = vec4(0.0f,0.0f,1.0f,1.0f);
+
+//Multiplyadd is applied to scale texture coordinates to the range [0,1]
+const vec2 madd=vec2(0.5,0.5);
+varying vec2 textureCoord;
+
+void main() {
+
+   textureCoord = vertexin*madd+madd;
+   gl_Position = vec4(posdim.xy+(vertexin*posdim.zw),0.0,1.0);
+}
