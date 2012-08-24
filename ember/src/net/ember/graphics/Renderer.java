@@ -79,6 +79,7 @@ public class Renderer implements GLEventListener {
 	final int[] lightbufferBuffers = {GL3.GL_COLOR_ATTACHMENT0, GL3.GL_COLOR_ATTACHMENT1};
 
 
+	/**For releases, this should use IDs not texture names.*/
 	public Map<String,Material> loadedMaterials = new HashMap<String,Material>();
 	public Map<String,Model> loadedModels = new HashMap<String,Model>();
 	public Map<String,Font> loadedFonts = new HashMap<String,Font>();

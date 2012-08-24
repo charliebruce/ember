@@ -1,6 +1,6 @@
 package net.ember.graphics.shaders;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL3;
 
 /**
  * A shader, which implements Blinn-Phong for a point light with no shadows.
@@ -11,7 +11,7 @@ import javax.media.opengl.GL2;
 public class PointLightShader extends Shader {
 
 	@Override
-	public void getLocations(GL2 gl) {
+	public void getLocations(GL3 gl) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -32,7 +32,7 @@ public class PointLightShader extends Shader {
 	}
 
 	@Override
-	public void setUniforms(GL2 gl) {
+	public void setUniforms(GL3 gl) {
 		// TODO Auto-generated method stub
 		
 	}
