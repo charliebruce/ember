@@ -44,12 +44,10 @@ public class OggStream implements Stream {
 
 	boolean streaming=false,canremove=false;
 
-	public OggStream(String filename){
+	public OggStream(String filename) throws FileNotFoundException{
 		/**
 		 * Ogg streams use double buffering.
 		 */
-
-		try {
 			RandomAccessFile f = Filesystem.get(filename);
 
 			od = new OggDecoder(f);
@@ -73,9 +71,9 @@ public class OggStream implements Stream {
 					numBytesPerSample / numChannels / rate / 10.0);
 			sleepTime = (sleepTime + 10)/10 * 10;
 
-			System.err.println("#Buffers: " + NUM_BUFFERS);
-			System.err.println("Buffer size: " + BUFFER_SIZE);
-			System.err.println("Format: 0x" + Integer.toString(format, 16)+" ("+((numChannels==2)?"STEREO":"MONO")+")");
+			//System.err.println("#Buffers: " + NUM_BUFFERS);
+			//System.err.println("Buffer size: " + BUFFER_SIZE);
+			//System.err.println("Format: 0x" + Integer.toString(format, 16)+" ("+((numChannels==2)?"STEREO":"MONO")+")");
 			
 			if(sleepTime<SoundStreamThread.SLEEPTIME){
 			System.err.println("Sleep time should be at least: " + sleepTime+" but is "+SoundStreamThread.SLEEPTIME+": increase or suffer stuttering audio.");
@@ -83,16 +81,6 @@ public class OggStream implements Stream {
 			// TODO: I am not if this is the right way to fix the endian
 			// problems I am having... but this seems to fix it on Linux
 			od.setSwap(true);
-
-
-
-		} catch (FileNotFoundException e) {
-			Log.warn("OGG stream failed: Could not find file "+filename);
-			return;
-		}
-
-
-
 
 	}
 

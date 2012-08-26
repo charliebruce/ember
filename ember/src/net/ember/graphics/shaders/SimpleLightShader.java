@@ -1,5 +1,6 @@
 package net.ember.graphics.shaders;
 
+import javax.media.opengl.GL2;
 import javax.media.opengl.GL3;
 
 public class SimpleLightShader extends Shader {
@@ -10,7 +11,7 @@ public class SimpleLightShader extends Shader {
 	private int depthSamplerLocation;
 
 	@Override
-	public void getLocations(GL3 gl) {
+	public void getLocations(GL2 gl) {
 		vertexLocation = gl.glGetAttribLocation(id, "vertexin");
 		posdimLocation = gl.glGetAttribLocation(id, "posdim");
 
@@ -19,7 +20,7 @@ public class SimpleLightShader extends Shader {
 	}
 
 	@Override
-	public void setUniforms(GL3 gl) {
+	public void setUniforms(GL2 gl) {
 
 		gl.glUniform1i(normalSamplerLocation, 1);
 		gl.glUniform1i(depthSamplerLocation, 3);

@@ -15,6 +15,7 @@ import javax.media.opengl.GL3;
 import com.jogamp.common.nio.Buffers;
 
 import net.ember.filesystem.Filesystem;
+import net.ember.graphics.Renderer;
 import net.ember.logging.Log;
 
 /**
@@ -34,8 +35,9 @@ public abstract class Shader {
 	 * Load the shader into GL and its locations into memory.
 	 * @param gl
 	 */
-	public void load(GL3 gl){
+	public void load(GL2 gl){
 		
+		gl.glUseProgram(0);
 		
 		vertid = gl.glCreateShader(GL2.GL_VERTEX_SHADER);
 		fragid = gl.glCreateShader(GL2.GL_FRAGMENT_SHADER);
@@ -45,6 +47,7 @@ public abstract class Shader {
 		temp = loadFile(getFragmentCodeName());
 		gl.glShaderSource(fragid, 1, new String[]{temp}, new int[]{temp.length()},0);
 		gl.glCompileShader(fragid);
+		
 
 		temp = loadFile(getVertexCodeName());
 		gl.glShaderSource(vertid, 1, new String[]{temp}, new int[]{temp.length()},0);
@@ -56,25 +59,34 @@ public abstract class Shader {
 		gl.glAttachShader(id, fragid);
 
 		gl.glLinkProgram(id);
+		Log.debug("Linking.");
+		Renderer.assertNoError(gl);
+		
 		
 		getLocations(gl);
+		Log.debug("Locations.");
+		Renderer.assertNoError(gl);
 		
 		logProgram(gl,id,getName());
+		Renderer.assertNoError(gl);
 		
 		//Without this, uniforms aren't set correctly.
 		gl.glUseProgram(id);
-		
 		setUniforms(gl);
+		Log.debug("Uniforms.");
+		Renderer.assertNoError(gl);
 		
+		
+		gl.glUseProgram(0);
 	}
 	
 	/**
 	 * Since the locations exposed by shaders vary depending on the shader, we do this.
 	 * @param gl
 	 */
-	public abstract void getLocations(GL3 gl);
+	public abstract void getLocations(GL2 gl);
 	
-	public abstract void setUniforms(GL3 gl);
+	public abstract void setUniforms(GL2 gl);
 	
 	abstract String getFragmentCodeName();
 	abstract String getVertexCodeName();
@@ -121,7 +133,7 @@ public abstract class Shader {
 	
 	
 	
-	private final void logProgram(final GL3 gl, final int programId, final String name)
+	private final void logProgram(final GL2 gl, final int programId, final String name)
 	{
 		final IntBuffer lenBuffer = Buffers.newDirectIntBuffer(1);
 		gl.glGetProgramiv(programId, GL2.GL_INFO_LOG_LENGTH, lenBuffer);
@@ -136,19 +148,20 @@ public abstract class Shader {
 			logBuffer.get(logData);
 			String message = new String(logData);
 			if(!message.contains("Validation successful")){
-				Log.err("Error in " + name + "!");
-				Log.err("Error in program: "+new String(logData));
+				Log.err("Error in program "+name+": "+new String(logData));
 				checkVertLogInfo(gl);
 				checkFragLogInfo(gl);
 			}
 		}
 		else
 		{
-			Log.info("Shader " + name + " linked successfully.");
+			Log.info("Shader " + name + " completed. Logs follow.");
+			checkVertLogInfo(gl);
+			checkFragLogInfo(gl);
 		}
 	}
 	
-	private void checkVertLogInfo(GL3 gl)  
+	private void checkVertLogInfo(GL2 gl)  
 	{
 		IntBuffer iVal = Buffers.newDirectIntBuffer(1);
 		gl.glGetShaderiv(vertid, GL2.GL_INFO_LOG_LENGTH, iVal);
@@ -166,7 +179,7 @@ public abstract class Shader {
 		}
 		Log.info("Vert: "+msg);
 	}
-	private void checkFragLogInfo(GL3 gl)  
+	private void checkFragLogInfo(GL2 gl)  
 	{
 		IntBuffer iVal = Buffers.newDirectIntBuffer(1);
 		gl.glGetShaderiv(fragid, GL2.GL_INFO_LOG_LENGTH, iVal);
@@ -186,7 +199,7 @@ public abstract class Shader {
 		Log.info("Frag: "+msg);
 	}
 
-	public void unload(GL3 gl) {
+	public void unload(GL2 gl) {
 		/*Ensure not in use*/
 		gl.glUseProgram(0);
 		gl.glDetachShader(id, vertid);

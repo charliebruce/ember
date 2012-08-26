@@ -19,8 +19,8 @@ public class Camera extends Entity {
 	/**
 	 * Pixel dimensions
 	 */
-	public int width=1024;
-	public int height=768;
+	int width=Preferences.targetWidth;
+	int height=Preferences.targetHeight;
 
 	
 	/**
@@ -55,7 +55,7 @@ public class Camera extends Entity {
 
 		return cachedFrustrumPlanes;
 	}
-	
+	/*
 	private void rebuildFrustrumPlanes() {
 		rebuildFrustrumPlanes=false;
 		//Log.info("Rebuilding frustrum planes.");
@@ -123,7 +123,7 @@ public class Camera extends Entity {
 		
 		//Log.debug("Rebuild frustrum planes done. Left plane equation is "+Plane.toString(cachedFrustrumPlanes[0]));
 	}
-
+*/
 
 
 	public void setPosition(float[] pos){

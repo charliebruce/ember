@@ -10,6 +10,7 @@ public abstract class Living extends Entity {
 	protected CharacterController cc;
 	
 	public Living(){
-		
+		cc=new CharacterController();
+		cc.init(this);
 	}
 }

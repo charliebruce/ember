@@ -218,6 +218,7 @@ public class Region {
 		entities.clear();
 		
 		
+		
 	}
 	
 	/**
@@ -233,7 +234,12 @@ public class Region {
 		/**
 		 * Remove them.
 		 */
-		
+
+		/**
+		 * Misc
+		 */
+		regionPhysicsMeshBody.destroy();
+		regionPhysicsMeshBody = null;
 		
 		loaded=false;
 	}

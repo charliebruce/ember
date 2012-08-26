@@ -11,7 +11,7 @@ import javax.vecmath.Vector3f;
 import net.ember.logging.Log;
 
 public class Utils {
-	public static final int loadFullscreenVBO(GL3 gl){
+	public static final int loadFullscreenVBO(GL2 gl){
 		Log.info("error code pre is "+gl.glGetError());
 
 		//gl.glUseProgram(test.getShaderProgram());

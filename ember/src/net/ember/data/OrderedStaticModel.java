@@ -8,6 +8,7 @@ import javax.media.opengl.GL3;
 import net.ember.client.Client;
 import net.ember.graphics.Graphics;
 import net.ember.graphics.Material;
+import net.ember.graphics.Renderer;
 import net.ember.graphics.shaders.Shaders;
 import net.ember.logging.Log;
 
@@ -27,7 +28,7 @@ public class OrderedStaticModel extends Model {
 	String[] matnames;
 
 	@Override
-	public void draw(GL3 gl) {
+	public void draw(GL2 gl) {
 		
 		/*
 		if(m.useAlbedoMap())
@@ -76,7 +77,7 @@ public class OrderedStaticModel extends Model {
 	}
 
 	@Override
-	public void loadIntoGraphics(GL3 gl) {
+	public void loadIntoGraphics(GL2 gl) {
 		mats=new Material[matnames.length];
 		
 		for (int i=0;i<matnames.length;i++){
@@ -97,13 +98,13 @@ public class OrderedStaticModel extends Model {
 		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
 		
 		gl.glEnable(GL.GL_ARRAY_BUFFER);//TODO check this?
-		
-		
+		Log.info("Load of OderedStaticModel");
+		Renderer.assertNoError(gl);
 		onGraphics=true;
 	}
 
 	@Override
-	public void unloadFromGraphics(GL3 gl) {
+	public void unloadFromGraphics(GL2 gl) {
 		gl.glDeleteBuffers(1, new int[]{vboId},0);
 	}
 

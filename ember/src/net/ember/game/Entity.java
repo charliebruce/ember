@@ -9,7 +9,7 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 
 /**
- * Any logical object in the game world.
+ * Any changeable object in the game world.
  * @author Charlie
  *
  */

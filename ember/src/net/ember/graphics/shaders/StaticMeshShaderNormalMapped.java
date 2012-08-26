@@ -35,7 +35,7 @@ public class StaticMeshShaderNormalMapped extends Shader {
 	
 	
 	@Override
-	public void getLocations(GL3 gl) {
+	public void getLocations(GL2 gl) {
 		
 		/**
 		 * Vertex
@@ -60,7 +60,7 @@ public class StaticMeshShaderNormalMapped extends Shader {
 	}
 	
 	@Override
-	public void setUniforms(GL3 gl) {
+	public void setUniforms(GL2 gl) {
 		gl.glUniform1i(albedomapLocation, 0);
 		gl.glUniform1i(normalmapLocation, 1);
 		gl.glUniform1i(alphamapLocation, 2);

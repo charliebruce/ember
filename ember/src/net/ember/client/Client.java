@@ -89,7 +89,8 @@ public class Client {
 		 * Now, initialise the subsystems and window.
 		 */
 		Graphics.renderer = new Renderer();
-		GLProfile glp = GLProfile.get(GLProfile.GL3);
+		GLProfile glp = GLProfile.get(GLProfile.GL2);
+		Log.info("Using GL2, best is "+GLProfile.getMaxProgrammable(true).getImplName());
         GLCapabilities glc = new GLCapabilities(glp);
         glc.setHardwareAccelerated(true);
         glc.setDoubleBuffered(true);
@@ -122,7 +123,7 @@ public class Client {
 		 */
 		loadManager = new LoadManager();
 		loadManagerThread = new Thread(loadManager, "Load Manager");
-		loadManagerThread.start();
+		//loadManagerThread.start();
 		
 		downloadManager = new DownloadManager();
 		downloadManagerThread = new Thread(downloadManager, "Download Manager");
@@ -163,7 +164,7 @@ public class Client {
 			}
 		}
 		
-		//To push textures.
+		//To push all the required textures and data to the GPU.
 		Graphics.renderer.loadData=true;
 		window.display();
 		

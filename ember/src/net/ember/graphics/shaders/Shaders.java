@@ -7,6 +7,9 @@ import java.util.Map;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GL3;
 
+import net.ember.graphics.Renderer;
+import net.ember.logging.Log;
+
 /**
  * A class to load and remember shaders (which are all loaded at first run, for now).
  * @author Charlie
@@ -24,7 +27,7 @@ public class Shaders {
 	
 	
 	
-	public static void load(GL3 gl){
+	public static void load(GL2 gl){
 		shaders = new LinkedList<Shader>();
 		
 		simpleTextureShader = new SimpleTextureShader();
@@ -45,13 +48,14 @@ public class Shaders {
 		
 		for(Shader s: shaders){
 			s.load(gl);
+			Log.debug("Shader "+s.getName()+" loaded.");
 		}
 	
 	}
 
 
 
-	public static void unload(GL3 gl) {
+	public static void unload(GL2 gl) {
 		for(Shader s: shaders){
 			s.unload(gl);
 		}

@@ -21,7 +21,7 @@ public class World {
 	public static Region[] regions = new Region[2];
 	
 	
-	private static List<Entity> entities = new ArrayList<Entity>();
+	public static List<Entity> entities = new ArrayList<Entity>();
 	
 	public static Player player;
 	

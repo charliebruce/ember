@@ -21,6 +21,13 @@ public class SoundStreamThread implements Runnable {
 			/**
 			 * Loop through the active streams
 			 */
+			//TODO synchronised(streams)? : 
+			/*Exception in thread "Sound Streamer Thread" java.util.ConcurrentModificationException
+			at java.util.LinkedList$ListItr.checkForComodification(Unknown Source)
+			at java.util.LinkedList$ListItr.next(Unknown Source)
+			at net.ember.sound.SoundStreamThread.run(SoundStreamThread.java:24)
+			after ogg stream complete.
+			*/
 			for (Stream s: Sound.streams){
 				
 				/**
@@ -42,7 +49,7 @@ public class SoundStreamThread implements Runnable {
 			try {
 				Thread.sleep(SLEEPTIME);
 			} catch (InterruptedException e) {
-				Log.info("Interrulted exception in SoundStreamThread.");
+				Log.info("Interrupted exception in SoundStreamThread.");
 			}
 		}
 		

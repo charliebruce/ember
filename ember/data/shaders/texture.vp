@@ -1,4 +1,4 @@
-#version 150
+#version 120
 
 //The input vectors - this is just a simple 2D square.
 attribute vec2 vertexin;

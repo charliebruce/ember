@@ -213,14 +213,20 @@ public class Sound {
 
 	public static void playMusicToCompletion(String name) {
 		if(name.endsWith(".ogg")){
-			OggStream os = new OggStream(name);
-			streams.add(os);
-			float[] pos = new float[]{Graphics.camera.position.x,Graphics.camera.position.y,Graphics.camera.position.z};
-			float[] vel = new float[]{Graphics.camera.velocity.x,Graphics.camera.velocity.y,Graphics.camera.velocity.z};
-			float[] dir = new float[]{1.0f,0.0f,0.0f};
-			os.start(al,pos,vel,dir);
-			attachments.add(new SoundAttachment(os,Graphics.camera));
-		}
+			try{
+				OggStream os = new OggStream(name);
+				streams.add(os);
+				float[] pos = new float[]{Graphics.camera.position.x,Graphics.camera.position.y,Graphics.camera.position.z};
+				float[] vel = new float[]{Graphics.camera.velocity.x,Graphics.camera.velocity.y,Graphics.camera.velocity.z};
+				float[] dir = new float[]{1.0f,0.0f,0.0f};
+				os.start(al,pos,vel,dir);
+				attachments.add(new SoundAttachment(os,Graphics.camera));
+			}catch(FileNotFoundException e){
+				Log.warn("OGG play failed: Could not find file "+name);
+			}
+			
+			
+		}else Log.warn("Unable to play non-ogg.");
 	}
 
 	

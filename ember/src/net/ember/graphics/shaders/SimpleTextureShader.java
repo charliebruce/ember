@@ -1,6 +1,9 @@
 package net.ember.graphics.shaders;
 
-import javax.media.opengl.GL3;
+import javax.media.opengl.GL2;
+
+import net.ember.graphics.Renderer;
+import net.ember.logging.Log;
 
 /**
  * Simply passes a texture on to the screen.
@@ -14,15 +17,15 @@ public class SimpleTextureShader extends Shader {
 	public int posdimLocation;
 	public int textureLocation;
 	@Override
-	public void getLocations(GL3 gl) {
+	public void getLocations(GL2 gl) {
 		
-		vertexLocation = gl.glGetAttribLocation(id, "vertexin");
-		
+		vertexLocation = gl.glGetAttribLocation(id, "vertexin");		
 		posdimLocation = gl.glGetUniformLocation(id, "posdim");
 		textureLocation = gl.glGetUniformLocation(id, "tex");
+
 	
 	}
-	public void setUniforms(GL3 gl){
+	public void setUniforms(GL2 gl){
 		gl.glUniform1i(textureLocation, 0);
 	}
 

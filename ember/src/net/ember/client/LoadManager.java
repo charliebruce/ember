@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.media.opengl.GL2;
-import javax.media.opengl.GL3;
 
 import net.ember.data.MaterialFileLoader;
 import net.ember.data.Model;
@@ -30,7 +29,7 @@ public class LoadManager implements Runnable {
 	boolean abort=false;
 	private Object lock = new Object();
 
-	private boolean regionNeedsLoad = false;
+	private boolean regionNeedsPreload = false;
 	private int region = 0;
 	private int buffer = 0;
 
@@ -42,7 +41,7 @@ public class LoadManager implements Runnable {
 
 		while(!abort){
 
-			if(regionNeedsLoad){//If some work needs doing
+			if(regionNeedsPreload){//If some work needs doing
 				synchronized(lock){
 					
 					Log.info("Loading region " + region);
@@ -66,7 +65,6 @@ public class LoadManager implements Runnable {
 					 */
 					synchronized(materialsToLoad){
 						materialsToLoad.add(Material.get("hellknight"));
-						//materialsToLoad.add(Material.get("vase_round"));
 						
 					}
 					
@@ -92,8 +90,8 @@ public class LoadManager implements Runnable {
 
 				
 
-					Log.info("Finished load of region "+region);
-					regionNeedsLoad=false;
+					Log.info("Finished load of region "+region + " - resources will be transferred to the GPU and checked before the region becomes active.");
+					regionNeedsPreload=false;
 				}
 			}
 
@@ -121,7 +119,7 @@ public class LoadManager implements Runnable {
 
 	public void loadRegion(int regionid,int bufferid) {
 		synchronized(lock){
-			regionNeedsLoad = true;
+			regionNeedsPreload = true;
 			region = regionid;
 			buffer = bufferid;
 		}
@@ -129,11 +127,11 @@ public class LoadManager implements Runnable {
 
 
 	public boolean idle() {
-		return !regionNeedsLoad;
+		return !regionNeedsPreload;
 	}
 
 
-	public void loadNumMaterials(int num, GL3 gl){
+	public void loadNumMaterials(int num, GL2 gl){
 
 		synchronized(materialsToLoad)
 		{
@@ -153,7 +151,7 @@ public class LoadManager implements Runnable {
 	}
 	
 	
-	public void loadAllMaterials(GL3 gl){
+	public void loadAllMaterials(GL2 gl){
 		synchronized(materialsToLoad)
 		{
 			for(Material m: materialsToLoad){
@@ -170,7 +168,7 @@ public class LoadManager implements Runnable {
 	}
 
 
-	public void loadAllModels(GL3 gl) {
+	public void loadAllModels(GL2 gl) {
 		synchronized(modelsToLoad)
 		{
 			for(Model m: modelsToLoad){
@@ -185,7 +183,7 @@ public class LoadManager implements Runnable {
 	 * This is called every tick from the renderer - it should only do work when vital, to minimise stalls.
 	 * @param gl
 	 */
-	public void loadData(GL3 gl) {
+	public void loadData(GL2 gl) {
 		loadAllMaterials(gl);
 		loadAllModels(gl);
 		Graphics.renderer.loadData=false;

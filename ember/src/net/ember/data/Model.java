@@ -10,9 +10,9 @@ import javax.media.opengl.GL3;
  */
 public abstract class Model {
 
-	public abstract void draw(GL3 gl);
-	public abstract void loadIntoGraphics(GL3 gl);
-	public abstract void unloadFromGraphics(GL3 gl);
+	public abstract void draw(GL2 gl);
+	public abstract void loadIntoGraphics(GL2 gl);
+	public abstract void unloadFromGraphics(GL2 gl);
 	public String name;
 	public boolean onGraphics=false;
 	public float scale=1.0f;
