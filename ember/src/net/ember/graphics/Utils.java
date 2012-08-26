@@ -12,32 +12,26 @@ import net.ember.logging.Log;
 
 public class Utils {
 	public static final int loadFullscreenVBO(GL2 gl){
-		Log.info("error code pre is "+gl.glGetError());
-
+		
 		//gl.glUseProgram(test.getShaderProgram());
 		int[] target = new int[1];
 		gl.glGenBuffers(1, target, 0);
-		Log.info("error code00000 is "+gl.glGetError());
-
+		
 		
 		//float[] data = new float[]{-1,1,1,1,-1,-1,1,-1};
 		float[] data = new float[]{1,-1,1,1,-1,-1,-1,-1,1,1,-1,1};
 		
 		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, target[0]);
-		Log.info("error code00001 is "+gl.glGetError());
-
+		
 		
 		gl.glBufferData(GL.GL_ARRAY_BUFFER, 6*8/*4points*2variables*4bpfloat*/,FloatBuffer.wrap(data), GL.GL_STATIC_DRAW);
-		Log.info("error code00002 is "+gl.glGetError());
-
+		
 		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
 
 		//gl.glEnable(GL.GL_ARRAY_BUFFER);
-Log.info("error code is "+gl.glGetError());
-		
+		Log.debug("Loading the full-screen VBO.");
+		Renderer.assertNoError(gl);
 		return target[0];
-
-		//gl.glUseProgram(0);
 	}
 
 	public static float[] transformationMatrix(Vector3f position,

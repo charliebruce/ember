@@ -1,5 +1,7 @@
 package net.ember.graphics;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,14 +14,19 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GL3;
 import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
+import javax.media.opengl.GLProfile;
 
 
 import net.ember.client.Client;
+import net.ember.client.Preferences;
 import net.ember.data.Model;
 import net.ember.filesystem.Filesystem;
 import net.ember.graphics.shaders.Shaders;
 import net.ember.logging.Log;
+
+import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
@@ -462,6 +469,36 @@ public class Renderer implements GLEventListener {
 				return;
 			}
 		}
+		
+	}
+
+
+
+
+	public GLWindow createWindow() {
+		GLProfile glp = GLProfile.get(GLProfile.GL2);
+		Log.info("Using GL2, best is "+GLProfile.getMaxProgrammable(true).getImplName());
+        GLCapabilities glc = new GLCapabilities(glp);
+        glc.setHardwareAccelerated(true);
+        glc.setDoubleBuffered(true);
+     
+		GLWindow window = GLWindow.create(glc);
+		//window.setAutoSwapBufferMode(false);
+		window.setTitle("Ember");
+		
+		
+		GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		boolean fullscreen=false;
+		if(device.isFullScreenSupported()&&Preferences.fullscreen) fullscreen=true;
+		fullscreen=false;
+		if(fullscreen) 
+			window.setFullscreen(fullscreen);
+		
+		window.setSize(Preferences.targetWidth, Preferences.targetHeight);
+		window.addGLEventListener(Graphics.renderer);
+		window.setVisible(true);
+		
+		return window;
 		
 	}
 	

@@ -89,27 +89,7 @@ public class Client {
 		 * Now, initialise the subsystems and window.
 		 */
 		Graphics.renderer = new Renderer();
-		GLProfile glp = GLProfile.get(GLProfile.GL2);
-		Log.info("Using GL2, best is "+GLProfile.getMaxProgrammable(true).getImplName());
-        GLCapabilities glc = new GLCapabilities(glp);
-        glc.setHardwareAccelerated(true);
-        glc.setDoubleBuffered(true);
-     
-		window = GLWindow.create(glc);
-		//window.setAutoSwapBufferMode(false);
-		window.setTitle("Ember");
-		
-		
-		GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		boolean fullscreen=false;
-		if(device.isFullScreenSupported()&&Preferences.fullscreen) fullscreen=true;
-		fullscreen=false;
-		if(fullscreen) 
-			window.setFullscreen(fullscreen);
-		
-		window.setSize(Preferences.targetWidth, Preferences.targetHeight);
-		window.addGLEventListener(Graphics.renderer);
-		window.setVisible(true);
+		window = Graphics.renderer.createWindow();
 		
 		/**
 		 * Load screen shown.
@@ -123,7 +103,7 @@ public class Client {
 		 */
 		loadManager = new LoadManager();
 		loadManagerThread = new Thread(loadManager, "Load Manager");
-		//loadManagerThread.start();
+		loadManagerThread.start();
 		
 		downloadManager = new DownloadManager();
 		downloadManagerThread = new Thread(downloadManager, "Download Manager");
