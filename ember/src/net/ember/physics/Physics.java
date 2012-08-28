@@ -14,6 +14,7 @@ import net.ember.client.Client;
 import net.ember.data.PhysicsMesh;
 import net.ember.game.Entity;
 import net.ember.logging.Log;
+import net.ember.logging.Timer;
 
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.dispatch.CollisionConfiguration;
@@ -54,9 +55,7 @@ public class Physics {
 	 * Step dt into the future, and read the state back out of the physics system.
 	 */
 	public static void tick() {
-		
-		long t0 = System.nanoTime();
-			
+				
 		
 		/**
 		 * First, update the state of character controllers etc. These have been updated by the input system
@@ -75,9 +74,9 @@ public class Physics {
 		boolean slowmo = false;
 		
 		if(slowmo)
-			 dynamicsWorld.stepSimulation(Client.dt*0.1f, 0,1f/60f);
+			 dynamicsWorld.stepSimulation(Client.FRAME_TIME*0.1f, 0,1f/60f);
 		 else
-			 dynamicsWorld.stepSimulation(Client.dt, 1);
+			 dynamicsWorld.stepSimulation(Client.FRAME_TIME, 1);
 
 
 		/**
@@ -98,8 +97,8 @@ public class Physics {
 		}
 		
 		Transform t = new Transform();
-		Vector3f v = new Vector3f();
-		Quat4f q = new Quat4f();
+		//Vector3f v = new Vector3f();
+		//Quat4f q = new Quat4f();
 		
 		for(Entity e: physEntities){
 			//e.rigidBody.activate();
@@ -138,9 +137,6 @@ public class Physics {
 			cc.move();
 		}
 		
-		long tt=System.nanoTime()-t0;
-		
-		//Log.debug("Physics took " + tt + "ns");
 
 	}
 

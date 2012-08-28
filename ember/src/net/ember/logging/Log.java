@@ -31,4 +31,9 @@ public class Log {
 		}//*/
 	}
 
+	public static void close() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

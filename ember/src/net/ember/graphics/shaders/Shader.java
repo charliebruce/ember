@@ -19,12 +19,15 @@ import net.ember.graphics.Renderer;
 import net.ember.logging.Log;
 
 /**
- * A wrapper to simplify the process of creating a shader.
+ * A wrapper to simplify the process of creating a shader. Extend this, implement the abstract functions, and create the shader programs.
  * @author Charlie
  *
  */
 public abstract class Shader {
 
+	/**
+	 * The program ID as returned by OpenGL
+	 */
 	public int id;
 	
 	private int vertid,fragid;
@@ -81,11 +84,15 @@ public abstract class Shader {
 	}
 	
 	/**
-	 * Since the locations exposed by shaders vary depending on the shader, we do this.
+	 * Since the locations exposed by shaders vary depending on the shader, we do this once.
 	 * @param gl
 	 */
 	public abstract void getLocations(GL2 gl);
 	
+	/**
+	 * We set the uniforms up at initialisation, too.
+	 * @param gl
+	 */
 	public abstract void setUniforms(GL2 gl);
 	
 	abstract String getFragmentCodeName();
@@ -147,7 +154,7 @@ public abstract class Shader {
 			final byte[] logData = new byte[length];
 			logBuffer.get(logData);
 			String message = new String(logData);
-			if(!message.contains("Validation successful")){
+			if(!message.contains("Validation successful")&&!message.contains("No errors.")){
 				Log.err("Error in program "+name+": "+new String(logData));
 				checkVertLogInfo(gl);
 				checkFragLogInfo(gl);
@@ -172,12 +179,12 @@ public abstract class Shader {
 		gl.glGetShaderInfoLog(vertid, length, iVal, infoLog);
 		byte[] infoBytes = new byte[length];
 		infoLog.get(infoBytes);String msg = new String(infoBytes);
-		if(msg.contains("successful")){//FIXME This might be phrased differently on other drivers.
-			if(msg.toLowerCase().contains("warning")){Log.warn("GLSL Vertex warning : " + msg);}}
+		if(msg.contains("successful")||msg.contains("No errors.")){//FIXME This might be phrased differently on other drivers.
+			if(msg.toLowerCase().contains("warning")){Log.warn("GLSL Vertex warning: " + msg);}else{Log.info("No errors in vertex compilation.");}}
 		else{
-			Log.err("Vertex log error : "+msg);
+			Log.err("Vertex log error: "+msg);
 		}
-		Log.info("Vert: "+msg);
+		
 	}
 	private void checkFragLogInfo(GL2 gl)  
 	{
@@ -191,8 +198,8 @@ public abstract class Shader {
 		byte[] infoBytes = new byte[length];
 		infoLog.get(infoBytes);
 		String msg = new String(infoBytes);
-		if(msg.contains("successful")){//FIXME This might be phrased differently on other drivers.
-			if(msg.toLowerCase().contains("warning")){Log.warn("GLSL Fragment warning : " + msg);}}
+		if(msg.contains("successful")||msg.contains("No errors.")){//FIXME This might be phrased differently on other drivers.
+			if(msg.toLowerCase().contains("warning")){Log.warn("GLSL Fragment warning : " + msg);}else{Log.info("No errors in fragment compilation.");}}
 			else{
 				Log.err("Fragment log error : "+msg);
 			}
@@ -200,8 +207,9 @@ public abstract class Shader {
 	}
 
 	public void unload(GL2 gl) {
-		/*Ensure not in use*/
+		/* Ensure not in use */
 		gl.glUseProgram(0);
+		/* Detach */
 		gl.glDetachShader(id, vertid);
 		gl.glDetachShader(id,fragid);
 		/* Delete the shaders */

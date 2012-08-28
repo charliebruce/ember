@@ -21,6 +21,8 @@ public class Input {
 	public static boolean useXInput = true;
 	public static EmberKeyListener keyListener = new EmberKeyListener();
 	private static Gamepad gamepad;
+	
+	
 	/**
 	 * Set up the inputs.
 	 */

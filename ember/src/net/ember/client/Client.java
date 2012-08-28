@@ -1,11 +1,5 @@
 package net.ember.client;
 
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLProfile;
-
 import com.jogamp.newt.opengl.GLWindow;
 
 import net.ember.filesystem.Filesystem;
@@ -14,6 +8,7 @@ import net.ember.graphics.Graphics;
 import net.ember.graphics.Renderer;
 import net.ember.input.Input;
 import net.ember.logging.Log;
+import net.ember.logging.Timer;
 import net.ember.natives.NativeLoader;
 import net.ember.physics.Physics;
 import net.ember.sound.Sound;
@@ -38,11 +33,6 @@ public class Client {
 	static GLWindow window;
 	static WindowListener wl;
 
-	/**
-	 * Timestep
-	 */
-	public static float dt = 1.0f/60.0f;
-	
 	/**
 	 * Load Manager
 	 */
@@ -84,6 +74,10 @@ public class Client {
 		 */
 		NativeLoader.loadNativeLibraries();
 		
+		/**
+		 * Start the simple timekeeper.
+		 */
+		Timer.init();
 	
 		/**
 		 * Now, initialise the subsystems and window.
@@ -169,21 +163,24 @@ public class Client {
 		Graphics.renderer.initialLoadScreen=false;
 		Log.info("Initialised the engine.");
 	}
-
+	
+	
+	
 	/**
 	 * Begin running the game loop.
 	 */
 	public static void run() {
+		//Temporary storage for timekeeping
+		long t0,t1,t2,t3,t4,t5;
 		while(mainThreadRunning){
 
-			long t0 = System.nanoTime();
+			t0 = System.nanoTime();
 			/**
 			 * First we send the data to the graphics pipeline.
 			 */
-			//long starttime = System.nanoTime();
 			window.display();
-			//long pipetime = System.nanoTime();
-			
+			t1 = System.nanoTime();
+			Timer.event(Timer.Display, t1-t0);
 			/**
 			 * While the graphics card is processing, we set up the next frame of data.
 			 * There should and could be some threading, since tasks like audio update 
@@ -195,24 +192,29 @@ public class Client {
 			 * Accept user input.
 			 */
 			Input.tick();
-			//long intime = System.nanoTime();
+			t2 = System.nanoTime();
+			Timer.event(Timer.Input, t2-t1);
 			
 			/**
 			 * Process the physics simulation forward a frame.
 			 */
-			long ppt = System.nanoTime();
 			Physics.tick();
-			long phystime = System.nanoTime();
+			t3 = System.nanoTime();
+			Timer.event(Timer.Physics, t3-t2);
 			
 			/**
 			 * Process AI and gameplay events
 			 */
 			World.tick();
-			long worldtime = System.nanoTime();
+			t4 = System.nanoTime();
+			Timer.event(Timer.World, t4-t3);
+			
 			/**
 			 * Process sound position updates.
 			 */
 			Sound.tick();
+			t5 = System.nanoTime();
+			Timer.event(Timer.Sound, t5-t4);
 			
 			/**
 			 * Ensure that background caching of sound, graphics and download data is going OK 
@@ -223,14 +225,17 @@ public class Client {
 			 * Now we switch the buffers to make everything visible. This stalls the thread 
 			 * for the remaining time when double-buffered/vsynced. 
 			 */
-			long t1 = System.nanoTime();
 			//window.swapBuffers();
-			long t2 = System.nanoTime()-t0;
+			//long t2 = System.nanoTime()-t0;
 			//Log.debug("time to sync "+t1);
 			//System.out.println("Total time "+(System.nanoTime()-t0));
-			int frametime = (int) ((t1-t0)/1000000);
-			if((t2/1000000)>18){
-				Log.warn("Frame took longer than expected. Breakdown:"+ frametime+"ms: Physics "+(phystime-ppt)/1000000+"."+((phystime-ppt)/100000)%10+"ms, World "+(worldtime-phystime)/1000000+"."+ ((worldtime-phystime)/100000)%10+"ms. Total to sync: "+(t2)/1000000+"ms");
+			
+			
+			Timer.newframe();
+			
+			
+			if((t1/1000000)>18){
+				Log.warn("Frame sync took longer than expected. Breakdown: "+Timer.breakdownLastFrame());
 			}
 			//This creates massive judder, setting the title seems to take a while.
 			//window.setTitle("Ember: "+ frametime+"ms: Physics "+(phystime-ppt)/1000000+"."+((phystime-ppt)/100000)%10+"ms World "+(worldtime-phystime)/1000000+"."+ ((worldtime-phystime)/100000)%10+"ms Sync "+(t2)/1000000);
@@ -249,6 +254,8 @@ public class Client {
 		window.setVisible(false);
 		/*causes dispose in renderer*/
 		window.destroy();
+		Log.close();
+		Timer.close();
 	}
 	
 	

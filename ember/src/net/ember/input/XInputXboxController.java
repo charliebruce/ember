@@ -18,7 +18,8 @@ public class XInputXboxController implements Gamepad {
 	private ByteBuffer bb;
 	private ShortBuffer sb;
 	
-	int battery;
+	int batterylevel;
+	int batterytype;
 	
 	public boolean connected = false;
 	public boolean voiceSupported = false;
@@ -31,7 +32,16 @@ public class XInputXboxController implements Gamepad {
 	 */
 	public float lt=0.0f,rt=0.0f;
 	
-	public float[] axes = new float[4];
+	/**
+	 * Left and right sticks, from -1f to 1f
+	 */
+	float lx,ly,rx,ry;
+	
+	/**
+	 * Left and right sticks as theta and magnitude 0f-1f, radians, 0 is right (think polar coords, x-direction, etc), positive anticlockwise.
+	 */
+	float ltheta, rtheta,lmag,rmag;
+	public short[] axes = new short[4];
 	
 	/**
 	 * Obtain the latest information from the controller.
@@ -44,18 +54,53 @@ public class XInputXboxController implements Gamepad {
 		}
 		
 		buttons = sb.get();
-		//TODO read axes
+		
+		//Scale to 0f...1f
 		lt=sb.get()*XInput.recipMaxTriggerTravel;
 		rt=sb.get()*XInput.recipMaxTriggerTravel;
 		
+		//raw
 		axes[0]=sb.get(); //Left stick, left-right -32768->32768.
 		axes[1]=sb.get();
 		axes[2]=sb.get();
 		axes[3]=sb.get();
 
-		//if((lx*lx+ly*ly)<XInput.XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE_SQUARED){
-			//Deadzone says no.
-		//}
+		int distl = (axes[0]*axes[0]+axes[1]*axes[1]);
+		if(distl<XInput.XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE_SQUARED){
+			//In the deadzone
+			lx=0f;ly=0f;
+			ltheta=0f;
+			lmag=0f;
+		}else{
+			
+			//axes[0] = right, axes[1] = up
+			//Scale "travel between limit and deadzone beginning" to 0,1
+			lmag = (float) ((Math.sqrt(distl)-XInput.XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)/XInput.XINPUT_GAMEPAD_LEFT_THUMB_LIMIT_MINUS_DEADZONE);
+			
+			ltheta = (float) Math.atan2(axes[1], axes[0]);//TODO check this or hilarity (loss of control) may ensue. Drunken mode(cheat)?
+			
+			lx=(float) (Math.cos(ltheta)*lmag);
+			ly=(float) (Math.sin(ltheta)*lmag);
+			
+		}
+		int distr = (axes[2]*axes[2]+axes[3]*axes[3]);
+		if(distr<XInput.XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE_SQUARED){
+			//In the deadzone
+			rx=0f;ry=0f;
+			rtheta=0f;
+			rmag=0f;
+		}else{
+			
+			//axes[0] = right, axes[1] = up
+			//Scale "travel between limit and deadzone beginning" to 0,1
+			rmag = (float) ((Math.sqrt(distr)-XInput.XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)/XInput.XINPUT_GAMEPAD_RIGHT_THUMB_LIMIT_MINUS_DEADZONE);
+			
+			rtheta = (float) Math.atan2(axes[3], axes[2]);//TODO check this or hilarity (loss of control) may ensue. Drunken mode(cheat)?
+			
+			rx=(float) (Math.cos(rtheta)*rmag);
+			ry=(float) (Math.sin(rtheta)*rmag);
+			
+		}
 
 		bb.clear();
 		sb.rewind();
@@ -106,23 +151,24 @@ public class XInputXboxController implements Gamepad {
 		if(sb.get()!=0)Log.info("Unknown type in capabilities - not a gamepad?");
 		
 		int subtype = sb.get();
-		if(subtype!=XInput.XINPUT_DEVSUBTYPE_GAMEPAD) Log.info("Not a standard gamepad, but some other device - drums, wheel?");
+		if(subtype!=XInput.XINPUT_DEVSUBTYPE_GAMEPAD) 
+			Log.info("Using a "+XInput.getDeviceType(subtype)+" - only gamepads are supported.");
 		
 		bb.clear();
 		sb.rewind();
 		XInput.getBatteryState(index, bb);
 		
 		if(sb.get()!=1) Log.warn("Cannot read battery state.");
-		battery = sb.get();
-		int batterytype = sb.get();
+		batterylevel = sb.get();
+		batterytype = sb.get();
 		
-		if((battery&XInput.BATTERY_TYPE_WIRED)!=0)
+		if((batterylevel&XInput.BATTERY_TYPE_WIRED)!=0)
 			wireless=false;
 		else 
 			wireless=true;
 		
 		if(wireless){
-			Log.info("Wireless controller "+index+" has level "+XInput.getBatteryLevel(battery)+" and is a "+XInput.getBatteryType(batterytype)+" battery.");
+			Log.info("Wireless controller "+index+" has level "+XInput.getBatteryLevel(batterylevel)+" and is a "+XInput.getBatteryType(batterytype)+" battery.");
 		}else{
 			Log.info("Wired controller "+index+" connected.");
 		}
@@ -144,12 +190,16 @@ public class XInputXboxController implements Gamepad {
 			
 			
 			if(sb.get()!=1) Log.warn("Cannot read battery state.");
-			int batterylevel = sb.get();
-			if(batterylevel!=battery){
-				Log.info("Battery level changed.");
-				battery=batterylevel;
+			int blevel = sb.get();
+			if(blevel!=batterylevel){
+				Log.info("Battery level changed to "+XInput.getBatteryLevel(blevel));
+				batterylevel=blevel;
 			}
-			int batterytype = sb.get();
+			int btype = sb.get();
+			if(btype!=batterytype){
+				Log.info("Battery type changed to "+XInput.getBatteryType(btype));
+				batterytype=btype;
+			}
 			
 			bb.clear();
 			sb.rewind();
@@ -181,35 +231,40 @@ public class XInputXboxController implements Gamepad {
 		};
 	}
 
+	//TODO smoother. Account for the deadzone. Use LX,LY
 	@Override
 	public float getForward() {
-		float travel = XInput.recipMaxTravel*axes[1];
-		if(travel*travel < 0.05)
-		return 0;
-		else return travel;
+		return ly;
+		//float travel = XInput.recipMaxTravel*axes[1];
+		//if(travel*travel < 0.05)
+		//return 0;
+		//else return travel;
 	}
 
 	@Override
 	public float getRight() {
-		float travel = XInput.recipMaxTravel*axes[0];
-		if(travel*travel < 0.05)
-		return 0;
-		else return travel;
+		return lx;
+		//float travel = XInput.recipMaxTravel*axes[0];
+		//if(travel*travel < 0.05)
+		//return 0;
+		//else return travel;
 	}
 
 	@Override
 	public float getLookRight() {
-		float travel = XInput.recipMaxTravel*axes[2];
-		if(travel*travel < 0.05)
-		return 0;
-		else return travel;
+		return rx;
+		//float travel = XInput.recipMaxTravel*axes[2];
+		//if(travel*travel < 0.05)
+		//return 0;
+		//else return travel;
 	}
 
 	@Override
 	public float getLookUp() {
-		float travel = XInput.recipMaxTravel*axes[3];
-		if(travel*travel < 0.05)
-		return 0;
-		else return travel;
+		return ry;
+		//float travel = XInput.recipMaxTravel*axes[3];
+		//if(travel*travel < 0.05)
+		//return 0;
+		//else return travel;
 	}
 }

@@ -36,18 +36,17 @@ public class XInput {
 	static final int XINPUT_CAPS_VOICE_SUPPORTED = 0x0004;
 
 
-	//Types
+	//Device Types
 	static final int XINPUT_DEVSUBTYPE_GAMEPAD = 0x01;
+	static final int XINPUT_DEVSUBTYPE_WHEEL = 0x02;
+	static final int XINPUT_DEVSUBTYPE_ARCADE_STICK = 0x03;
+	static final int XINPUT_DEVSUBTYPE_FLIGHT_SICK = 0x04;
+	static final int XINPUT_DEVSUBTYPE_DANCE_PAD = 0x05;
+	static final int XINPUT_DEVSUBTYPE_GUITAR = 0x06;
+	static final int XINPUT_DEVSUBTYPE_DRUM_KIT = 0x08;
 
-	/*#define XINPUT_DEVSUBTYPE_WHEEL     0x02
-	#define XINPUT_DEVSUBTYPE_ARCADE_STICK 0x03
-	#define XINPUT_DEVSUBTYPE_FLIGHT_SICK  0x04
-	#define XINPUT_DEVSUBTYPE_DANCE_PAD   0x05
-	#define XINPUT_DEVSUBTYPE_GUITAR    0x06
-	#define XINPUT_DEVSUBTYPE_DRUM_KIT   0x08*/
-
-	/*SUGGESTED
-	 * 
+	/*
+	 * Deadzones as suggested by Microsoft 
 	 */
 	static final int XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE = 7849;
 	static final int XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE = 8689;
@@ -59,8 +58,11 @@ public class XInput {
 	 */
 	static final int XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE_SQUARED = 61606801;
 	static final int XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE_SQUARED = 75498721;
+	static final int XINPUT_GAMEPAD_LEFT_THUMB_LIMIT_MINUS_DEADZONE = 32768-XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+	static final int XINPUT_GAMEPAD_RIGHT_THUMB_LIMIT_MINUS_DEADZONE = 32768-XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
 	static final float recipMaxTriggerTravel = 1.0f/255.0f;
 	static final float recipMaxTravel = 1.0f/32768.0f;
+	private static int XINPUT_DEVSUBTYPE_FLIGHT_STICK;
 
 	/**
 	 * Return the battery state of the given controller.
@@ -128,6 +130,18 @@ public class XInput {
 		if(batterytype==BATTERY_TYPE_NIMH) return "Ni-MH";
 		if(batterytype==BATTERY_TYPE_WIRED) return "Wired";
 		if(batterytype==BATTERY_TYPE_DISCONNECTED) return "Disconnected";
+		
+		return "Unknown";
+	}
+	
+	public static String getDeviceType(int devtype){
+		if(devtype==XINPUT_DEVSUBTYPE_GAMEPAD) return "Gamepad";
+		if(devtype==XINPUT_DEVSUBTYPE_WHEEL) return "Wheel";
+		if(devtype==XINPUT_DEVSUBTYPE_ARCADE_STICK) return "Arcade Stick";
+		if(devtype==XINPUT_DEVSUBTYPE_FLIGHT_STICK) return "Flight Stick";
+		if(devtype==XINPUT_DEVSUBTYPE_DANCE_PAD) return "Dance Pad";
+		if(devtype==XINPUT_DEVSUBTYPE_GUITAR) return "Guitar";
+		if(devtype==XINPUT_DEVSUBTYPE_DRUM_KIT) return "Drum Kit";		
 		
 		return "Unknown";
 	}

@@ -48,8 +48,16 @@ public class Renderer implements GLEventListener {
 	 */
 	static int fsvbo;
 
+	/**
+	 * Load screen image. Gets special priority because it needs to be shown EARLY, or it looks like a crash.
+	 */
 	static int loadTex;
 
+	/**
+	 * Two special textures, used in case of load failure.
+	 */
+	public int nullAlbedoTexture;
+	public int nullNormalTexture;
 
 
 
@@ -65,11 +73,11 @@ public class Renderer implements GLEventListener {
 	public static Map<String,Model> loadedModels = new HashMap<String,Model>();
 	public static Map<String,Font> loadedFonts = new HashMap<String,Font>();
 
-
+	/**
+	 * Does the data-loading code need to be run this frame?
+	 */
 	public boolean loadData=false;
 
-	public int nullAlbedoTexture;
-	public int nullNormalTexture;
 
 
 	@Override
