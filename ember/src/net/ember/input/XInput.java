@@ -62,7 +62,6 @@ public class XInput {
 	static final int XINPUT_GAMEPAD_RIGHT_THUMB_LIMIT_MINUS_DEADZONE = 32768-XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
 	static final float recipMaxTriggerTravel = 1.0f/255.0f;
 	static final float recipMaxTravel = 1.0f/32768.0f;
-	private static int XINPUT_DEVSUBTYPE_FLIGHT_STICK;
 
 	/**
 	 * Return the battery state of the given controller.
@@ -124,7 +123,11 @@ public class XInput {
 	 */
 	static native void vibrate(int index,int left, int right);
 	
-	
+	/**
+	 * Return a string describing the type of battery, from the number returned by XInput.
+	 * @param batterytype
+	 * @return
+	 */
 	public static String getBatteryType(int batterytype){
 		if(batterytype==BATTERY_TYPE_ALKALINE) return "Alkaline";
 		if(batterytype==BATTERY_TYPE_NIMH) return "Ni-MH";
@@ -134,11 +137,16 @@ public class XInput {
 		return "Unknown";
 	}
 	
+	/**
+	 * Return a string describing the type of device, from the number returned by XInput.
+	 * @param devtype
+	 * @return
+	 */
 	public static String getDeviceType(int devtype){
 		if(devtype==XINPUT_DEVSUBTYPE_GAMEPAD) return "Gamepad";
 		if(devtype==XINPUT_DEVSUBTYPE_WHEEL) return "Wheel";
 		if(devtype==XINPUT_DEVSUBTYPE_ARCADE_STICK) return "Arcade Stick";
-		if(devtype==XINPUT_DEVSUBTYPE_FLIGHT_STICK) return "Flight Stick";
+		if(devtype==XINPUT_DEVSUBTYPE_FLIGHT_SICK) return "Flight Stick";
 		if(devtype==XINPUT_DEVSUBTYPE_DANCE_PAD) return "Dance Pad";
 		if(devtype==XINPUT_DEVSUBTYPE_GUITAR) return "Guitar";
 		if(devtype==XINPUT_DEVSUBTYPE_DRUM_KIT) return "Drum Kit";		
@@ -146,6 +154,11 @@ public class XInput {
 		return "Unknown";
 	}
 
+	/**
+	 * Return a string describing how full the battery is, from the number returned by XInput.
+	 * @param batterylevel
+	 * @return
+	 */
 	public static String getBatteryLevel(int batterylevel) {
 		if(batterylevel==BATTERY_LEVEL_EMPTY) return "Empty";
 		if(batterylevel==BATTERY_LEVEL_LOW) return "Low";

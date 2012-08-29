@@ -41,6 +41,10 @@ public class XInputXboxController implements Gamepad {
 	 * Left and right sticks as theta and magnitude 0f-1f, radians, 0 is right (think polar coords, x-direction, etc), positive anticlockwise.
 	 */
 	float ltheta, rtheta,lmag,rmag;
+	
+	/**
+	 * Raw data, range -32768<->32768
+	 */
 	public short[] axes = new short[4];
 	
 	/**
@@ -83,6 +87,7 @@ public class XInputXboxController implements Gamepad {
 			ly=(float) (Math.sin(ltheta)*lmag);
 			
 		}
+		
 		int distr = (axes[2]*axes[2]+axes[3]*axes[3]);
 		if(distr<XInput.XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE_SQUARED){
 			//In the deadzone
