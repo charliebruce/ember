@@ -40,13 +40,13 @@ public class Timer {
 	}
 
 
-	public static String breakdownLastFrame() {
+	public static String breakdownCurrentFrame() {
 		return "Disp: "+ms(log[atIndex][0])+" Inp: "+ms(log[atIndex][1])+" Phys: "+ms(log[atIndex][2])+" Wrld: "+ms(log[atIndex][3])+" Snd: "+ms(log[atIndex][4]);
 	}
 
 
 	private static String ms(long l) {
-		return (l/1000000)+"ms";
+		return ((float)l/1000000f)+"ms";
 	}
 
 
