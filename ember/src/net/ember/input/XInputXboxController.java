@@ -79,12 +79,14 @@ public class XInputXboxController implements Gamepad {
 			
 			//axes[0] = right, axes[1] = up
 			//Scale "travel between limit and deadzone beginning" to 0,1
-			lmag = (float) ((Math.sqrt(distl)-XInput.XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)/XInput.XINPUT_GAMEPAD_LEFT_THUMB_LIMIT_MINUS_DEADZONE);
+			lmag = (float) Math.min(1.0, ((Math.sqrt(distl)-XInput.XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)/XInput.XINPUT_GAMEPAD_LEFT_THUMB_LIMIT_MINUS_DEADZONE));
 			
 			ltheta = (float) Math.atan2(axes[1], axes[0]);//TODO check this or hilarity (loss of control) may ensue. Drunken mode(cheat)?
 			
 			lx=(float) (Math.cos(ltheta)*lmag);
 			ly=(float) (Math.sin(ltheta)*lmag);
+			
+			//Log.info("Out of deadzone, "+lmag +" in direction "+ltheta);
 			
 		}
 		
@@ -98,7 +100,7 @@ public class XInputXboxController implements Gamepad {
 			
 			//axes[0] = right, axes[1] = up
 			//Scale "travel between limit and deadzone beginning" to 0,1
-			rmag = (float) ((Math.sqrt(distr)-XInput.XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)/XInput.XINPUT_GAMEPAD_RIGHT_THUMB_LIMIT_MINUS_DEADZONE);
+			rmag = (float) Math.min(1.0, ((Math.sqrt(distr)-XInput.XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)/XInput.XINPUT_GAMEPAD_RIGHT_THUMB_LIMIT_MINUS_DEADZONE));
 			
 			rtheta = (float) Math.atan2(axes[3], axes[2]);//TODO check this or hilarity (loss of control) may ensue. Drunken mode(cheat)?
 			
