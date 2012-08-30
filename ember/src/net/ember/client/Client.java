@@ -231,12 +231,14 @@ public class Client {
 			//System.out.println("Total time "+(System.nanoTime()-t0));
 			
 			
+			
+			
+			if(((t5-t0)/1000000)>18){
+				Log.warn("Frame sync took longer than expected. Breakdown: "+Timer.breakdownCurrentFrame());
+			}
+			
 			Timer.newframe();
 			
-			
-			if((t1/1000000)>18){
-				Log.warn("Frame sync took longer than expected. Breakdown: "+Timer.breakdownLastFrame());
-			}
 			//This creates massive judder, setting the title seems to take a while.
 			//window.setTitle("Ember: "+ frametime+"ms: Physics "+(phystime-ppt)/1000000+"."+((phystime-ppt)/100000)%10+"ms World "+(worldtime-phystime)/1000000+"."+ ((worldtime-phystime)/100000)%10+"ms Sync "+(t2)/1000000);
 		}

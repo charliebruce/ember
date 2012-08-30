@@ -82,7 +82,7 @@ public class Renderer implements GLEventListener {
 
 	@Override
 	public void display(GLAutoDrawable glad) {
-		Log.debug("Display.");
+		//Log.debug("Display.");
 		GL2 gl = glad.getGL().getGL2();
 		assertNoError(gl);
 		
@@ -94,14 +94,22 @@ public class Renderer implements GLEventListener {
 		//m.draw(gl);
 
 		gl.glDisable(GL.GL_DEPTH_TEST);
-		Log.info("Depth test disabled.");
+		//Log.debug("Depth test disabled.");
 		assertNoError(gl);
 		
 		long t0 = System.nanoTime();
 		if(!initialLoadScreen)
-		{DeferredRender.deferredPipeline(gl);}
+		{
+			//DeferredRender.deferredPipeline(gl);
+		}
 		else
-		{Log.info("Preload");assertNoError(gl);preloadScreen(gl);Log.info("Finished preload");assertNoError(gl);}
+		{
+			Log.info("Preload");
+			assertNoError(gl);
+			preloadScreen(gl);
+			Log.info("Finished preload");
+			assertNoError(gl);
+		}
 		
 		/**
 		 * Determine which render pipeline we're using and render.
