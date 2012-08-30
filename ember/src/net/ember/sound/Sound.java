@@ -8,6 +8,7 @@ import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.vecmath.Tuple3f;
 import javax.vecmath.Vector3f;
 
 import com.jogamp.openal.AL;
@@ -232,6 +233,7 @@ public class Sound {
 	
 
 	static float[] temp = new float[3];
+	static List<SoundAttachment> toRemove = new LinkedList<SoundAttachment>();
 	
 	static void updatePositions(){
 		for(SoundAttachment a: attachments){
@@ -251,12 +253,20 @@ public class Sound {
 				//Log.info("Moving source to "+a.soundAt.position.x+","+a.soundAt.position.y+","+a.soundAt.position.z);
 			}
 			else{
-				attachments.remove();//TODO check this behaves as expected.
-				a=null;
+				toRemove.add(a);//TODO check this behaves as expected.
 			}
 			
-			
+		
 		}
+		
+		//Prevent a concurrent modification exception
+		for(SoundAttachment s:toRemove){
+			attachments.remove(s);
+			s.destroy();
+			s=null;
+		}
+		toRemove.clear();
+		
 	}
 	
 	

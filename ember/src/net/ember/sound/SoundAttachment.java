@@ -12,4 +12,8 @@ public class SoundAttachment {
 	public Entity soundAt;
 	public int source;
 	public Stream stream;
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
 }
