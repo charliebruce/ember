@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 
-import javax.imageio.stream.ImageOutputStream;
-
 import net.ember.logging.Log;
 
 public class Filesystem {

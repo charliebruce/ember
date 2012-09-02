@@ -3,6 +3,7 @@ package net.ember.client;
 public class Preferences {
 
 	public static boolean gamepad = true;
+	public static boolean useXInput = true;// true;
 	public static int targetWidth = 1280;
 	public static int targetHeight = 720;
 	public static boolean fullscreen = false;

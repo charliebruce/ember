@@ -2,7 +2,7 @@ package net.ember.graphics.shaders;
 
 import javax.media.opengl.GL2;
 
-import net.ember.graphics.Renderer;
+import net.ember.graphics.Render;
 import net.ember.logging.Log;
 
 /**

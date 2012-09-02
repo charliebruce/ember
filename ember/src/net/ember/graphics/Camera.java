@@ -19,8 +19,8 @@ public class Camera extends Entity {
 	/**
 	 * Pixel dimensions
 	 */
-	int width=Preferences.targetWidth;
-	int height=Preferences.targetHeight;
+	public int width=Preferences.targetWidth;
+	public int height=Preferences.targetHeight;
 
 	
 	/**

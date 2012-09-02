@@ -30,7 +30,7 @@ public class Utils {
 
 		//gl.glEnable(GL.GL_ARRAY_BUFFER);
 		Log.debug("Loading the full-screen VBO.");
-		Renderer.assertNoError(gl);
+		Render.assertNoError(gl);
 		return target[0];
 	}
 

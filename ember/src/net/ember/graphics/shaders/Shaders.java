@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GL3;
 
-import net.ember.graphics.Renderer;
+import net.ember.graphics.Render;
 import net.ember.logging.Log;
 
 /**

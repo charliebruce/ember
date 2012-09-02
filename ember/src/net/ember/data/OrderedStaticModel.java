@@ -8,7 +8,7 @@ import javax.media.opengl.GL3;
 import net.ember.client.Client;
 import net.ember.graphics.Graphics;
 import net.ember.graphics.Material;
-import net.ember.graphics.Renderer;
+import net.ember.graphics.Render;
 import net.ember.graphics.shaders.Shaders;
 import net.ember.logging.Log;
 
@@ -99,7 +99,7 @@ public class OrderedStaticModel extends Model {
 		
 		gl.glEnable(GL.GL_ARRAY_BUFFER);//TODO check this?
 		Log.info("Load of OderedStaticModel");
-		Renderer.assertNoError(gl);
+		Render.assertNoError(gl);
 		onGraphics=true;
 	}
 

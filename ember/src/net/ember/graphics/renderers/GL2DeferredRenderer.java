@@ -1,12 +1,17 @@
-package net.ember.graphics;
+package net.ember.graphics.renderers;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GL3;
+import javax.media.opengl.GLAutoDrawable;
 
 import net.ember.data.Model;
 import net.ember.game.Entity;
 import net.ember.game.World;
+import net.ember.graphics.GLUtils;
+import net.ember.graphics.Graphics;
+import net.ember.graphics.Render;
+import net.ember.graphics.Utils;
 import net.ember.graphics.shaders.Shaders;
 import net.ember.logging.Log;
 import net.ember.math.Matrix;
@@ -16,12 +21,12 @@ import net.ember.math.Matrix;
  * @author Charlie
  *
  */
-public class DeferredRender {
+public class GL2DeferredRenderer implements Renderer {
 
 	/**
 	 * The textures to which the deferred buffers are written.
 	 */
-	static int[] deferredTextures;
+	public static int[] deferredTextures;
 	static int[] lightTextures;
 	
 
@@ -103,7 +108,7 @@ public class DeferredRender {
 		gl.glUniformMatrix4fv(Shaders.smsnm.mvpLocation, 1, false,Matrix.multMatrix(viewProjection,model), 0);
 
 		//Model m = loadedModels.get("hellknight");
-		Model hk = Renderer.loadedModels.get("hellknight");
+		Model hk = Render.loadedModels.get("hellknight");
 		hk.draw(gl);
 
 		
@@ -158,7 +163,7 @@ public class DeferredRender {
 		gl.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
 
 		
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER,  Renderer.fsvbo);
+		gl.glBindBuffer(GL.GL_ARRAY_BUFFER,  Render.fsvbo);
 		gl.glVertexAttribPointer(Shaders.simpleLightShader.vertexLocation, 2, GL.GL_FLOAT, false, 0,0);//2=xy,0,0/no stride, no offset
 		gl.glEnableVertexAttribArray(Shaders.simpleLightShader.vertexLocation);
 
@@ -318,8 +323,10 @@ public class DeferredRender {
 
 
 
-	static void resizeBuffers(GL2 gl) {
+	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
 
+		GL2 gl = drawable.getGL().getGL2();
+		
 		gl.glBindTexture(GL.GL_TEXTURE_2D, deferredTextures[0]);
 		gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL3.GL_RGBA16 /*GL3.GL_DEPTH_COMPONENT32F*/, Graphics.camera.width, Graphics.camera.height, 0, GL3.GL_RGBA/*depth component*/, GL3.GL_SHORT/*UINT/FLOAT?*/, null);
 

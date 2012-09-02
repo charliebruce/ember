@@ -23,6 +23,8 @@ import net.ember.client.Client;
 import net.ember.client.Preferences;
 import net.ember.data.Model;
 import net.ember.filesystem.Filesystem;
+import net.ember.graphics.renderers.GL2DeferredRenderer;
+import net.ember.graphics.renderers.Renderer;
 import net.ember.graphics.shaders.Shaders;
 import net.ember.logging.Log;
 
@@ -41,12 +43,12 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * @author Charlie
  *
  */
-public class Renderer implements GLEventListener {
+public class Render implements GLEventListener {
 
 	/**
 	 * Fullscreen VBO - just scales from -1 to 1, XY
 	 */
-	static int fsvbo;
+	public static int fsvbo;
 
 	/**
 	 * Load screen image. Gets special priority because it needs to be shown EARLY, or it looks like a crash.
@@ -78,6 +80,7 @@ public class Renderer implements GLEventListener {
 	 */
 	public boolean loadData=false;
 
+	private Renderer r;
 
 
 	@Override
@@ -157,7 +160,7 @@ public class Renderer implements GLEventListener {
 		gl.glUseProgram(Shaders.simpleTextureShader.id);
 		gl.glUniform4fv(Shaders.simpleTextureShader.posdimLocation, 1, new float[]{0.0f,0.0f,1.0f,1.0f}, 0);
 		gl.glActiveTexture(GL.GL_TEXTURE0);
-		gl.glBindTexture(GL.GL_TEXTURE_2D, DeferredRender.deferredTextures[0]);
+		gl.glBindTexture(GL.GL_TEXTURE_2D, GL2DeferredRenderer.deferredTextures[0]);
 
 
 		gl.glBindBuffer(GL.GL_ARRAY_BUFFER,  fsvbo);
@@ -253,6 +256,8 @@ public class Renderer implements GLEventListener {
 	@Override
 	public void init(GLAutoDrawable arg0) {
 		
+		r = new GL2DeferredRenderer();
+		
 		/**
 		 * Configure the GL instance.
 		 */
@@ -309,14 +314,13 @@ public class Renderer implements GLEventListener {
 
 
 	@Override
-	public void reshape(GLAutoDrawable arg0, int arg1, int arg2, int width, int height) {
+	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
 		Graphics.camera.width=width;
 		Graphics.camera.height=height;
 
 		Graphics.camera.recalculateProjection();
 
-		//DeferredRender.resizeBuffers(arg0.getGL().getGL2());
-		//Resize buffers here.
+		//r.reshape(drawable,x,y,width,height);
 	}
 
 	/**

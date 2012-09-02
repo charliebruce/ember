@@ -3,9 +3,10 @@ package net.ember.game.entities;
 import com.bulletphysics.collision.shapes.SphereShape;
 
 import net.ember.game.Entity;
+import net.ember.game.entities.living.BaseIntelligence;
 import net.ember.graphics.Graphics;
 
-public class Ball extends Entity {
+public class Ball extends BaseIntelligence {//Entity
 
 	public Ball(){
 		collisionShape = new SphereShape(0.5f);

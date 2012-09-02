@@ -5,7 +5,7 @@ import com.jogamp.newt.opengl.GLWindow;
 import net.ember.filesystem.Filesystem;
 import net.ember.game.World;
 import net.ember.graphics.Graphics;
-import net.ember.graphics.Renderer;
+import net.ember.graphics.Render;
 import net.ember.input.Input;
 import net.ember.logging.Log;
 import net.ember.logging.Timer;
@@ -82,7 +82,7 @@ public class Client {
 		/**
 		 * Now, initialise the subsystems and window.
 		 */
-		Graphics.renderer = new Renderer();
+		Graphics.renderer = new Render();
 		window = Graphics.renderer.createWindow();
 		
 		/**
@@ -126,7 +126,7 @@ public class Client {
 		Physics.init();
 		World.init();
 		
-		Sound.playMusicToCompletion("nonfree/Haven Forest.ogg");
+		//Sound.playMusicToCompletion("nonfree/Haven Forest.ogg");
 		
 		
 		while(!Client.loadManager.idle()){

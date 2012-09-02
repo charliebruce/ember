@@ -2,8 +2,8 @@ package net.ember.natives;
 
 import java.io.File;
 
+import net.ember.client.Preferences;
 import net.ember.filesystem.Filesystem;
-import net.ember.input.Input;
 import net.ember.logging.Log;
 
 public class NativeLoader {
@@ -57,11 +57,11 @@ public class NativeLoader {
 				System.load(f.getAbsolutePath());
 			}
 			else{
-				Input.useXInput = false;
+				Preferences.useXInput = false;
 			}
 		}else{
 			//We cannot use XInput library on non-Windows platforms. No rumble for Mac/Linux :(
-			Input.useXInput = false;
+			Preferences.useXInput = false;
 		}
 		
 	}

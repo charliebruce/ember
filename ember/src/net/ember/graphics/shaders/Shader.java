@@ -15,7 +15,7 @@ import javax.media.opengl.GL3;
 import com.jogamp.common.nio.Buffers;
 
 import net.ember.filesystem.Filesystem;
-import net.ember.graphics.Renderer;
+import net.ember.graphics.Render;
 import net.ember.logging.Log;
 
 /**
@@ -63,21 +63,21 @@ public abstract class Shader {
 
 		gl.glLinkProgram(id);
 		Log.debug("Linking.");
-		Renderer.assertNoError(gl);
+		Render.assertNoError(gl);
 		
 		
 		getLocations(gl);
 		Log.debug("Locations.");
-		Renderer.assertNoError(gl);
+		Render.assertNoError(gl);
 		
 		logProgram(gl,id,getName());
-		Renderer.assertNoError(gl);
+		Render.assertNoError(gl);
 		
 		//Without this, uniforms aren't set correctly.
 		gl.glUseProgram(id);
 		setUniforms(gl);
 		Log.debug("Uniforms.");
-		Renderer.assertNoError(gl);
+		Render.assertNoError(gl);
 		
 		
 		gl.glUseProgram(0);

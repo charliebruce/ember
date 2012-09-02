@@ -2,13 +2,10 @@ package net.ember.game.entities.living;
 
 import javax.vecmath.Vector3f;
 
-import com.bulletphysics.collision.shapes.CapsuleShape;
-
 import net.ember.game.Entity;
 import net.ember.game.Living;
 import net.ember.game.World;
 import net.ember.game.entities.living.ai.Pathfinder;
-import net.ember.graphics.Graphics;
 
 /**
  * Code which provides a simple, adaptable base for generic intelligent creatures.
