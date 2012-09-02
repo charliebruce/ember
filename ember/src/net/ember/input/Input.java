@@ -18,7 +18,6 @@ public class Input {
 	/**
 	 * By default we use XInput, but the native library loader may override this.
 	 */
-	public static boolean useXInput = true;
 	public static EmberKeyListener keyListener = new EmberKeyListener();
 	private static Gamepad gamepad;
 	
@@ -28,10 +27,12 @@ public class Input {
 	 */
 	public static void init(){
 
+		//TODO: Set it up differently. Gamepad and NonGamepad Interfaces, applied by client instead. 
 		if(Preferences.gamepad){
-			if(useXInput){
+			if(Preferences.useXInput){
 				XInput.enable(true);
 				gamepad = new XInputXboxController();
+				//((XInputXboxController) gamepad).rumbleOn();
 			}
 			else{
 				gamepad = new JInputXboxController();
@@ -45,7 +46,7 @@ public class Input {
 	 */
 	public static void close(){
 		if(Preferences.gamepad){
-			if(useXInput)
+			if(Preferences.useXInput)
 				XInput.enable(false);
 		}
 	}
@@ -69,7 +70,14 @@ public class Input {
 			gamepad.poll();
 		}
 		
-		
+		if(Preferences.useXInput){
+			if(gamepad.getLeftTrigger()>0.5f){
+				((XInputXboxController)gamepad).rumbleOn();
+			}
+			else {
+				gamepad.rumbleOff();
+			}
+		}
 		
 		
 		/**

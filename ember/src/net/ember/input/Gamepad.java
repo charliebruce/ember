@@ -56,5 +56,24 @@ public interface Gamepad {
 	 */
 	abstract float getRight();
 
-	abstract float getLookRight();	abstract float getLookUp();
+	abstract float getLookRight();	
+	abstract float getLookUp();
+	
+	/**
+	 * Stop the rumble motors immediately.
+	 */
+	abstract void rumbleOff();
+
+	/***
+	 * Get the position of the left-hand trigger, from 0f to 1f (un-toouched to fully depressed)
+	 * @return
+	 */
+	float getLeftTrigger();
+	
+	/***
+	 * Get the position of the right-hand trigger, from 0f to 1f (un-toouched to fully depressed)
+	 * @return
+	 */
+	float getRightTrigger();
+	
 }
