@@ -24,7 +24,7 @@ import net.ember.client.Preferences;
 import net.ember.data.Model;
 import net.ember.filesystem.Filesystem;
 import net.ember.graphics.renderers.GL2DeferredRenderer;
-import net.ember.graphics.renderers.Renderer;
+import net.ember.graphics.renderers.GL2ForwardRenderer;
 import net.ember.graphics.shaders.Shaders;
 import net.ember.logging.Log;
 
@@ -80,7 +80,7 @@ public class Render implements GLEventListener {
 	 */
 	public boolean loadData=false;
 
-	private Renderer r;
+	private GL2ForwardRenderer r;
 
 
 	@Override

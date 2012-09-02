@@ -21,7 +21,7 @@ import net.ember.math.Matrix;
  * @author Charlie
  *
  */
-public class GL2DeferredRenderer implements Renderer {
+public class GL2DeferredRenderer implements GL2ForwardRenderer {
 
 	/**
 	 * The textures to which the deferred buffers are written.
