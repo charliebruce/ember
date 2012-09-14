@@ -86,7 +86,7 @@ public class Render implements GLEventListener {
 	@Override
 	public void display(GLAutoDrawable glad) {
 		//Log.debug("Display.");
-		GL2 gl = glad.getGL().getGL2();
+		GL gl = glad.getGL();//.getGL2();
 		assertNoError(gl);
 		
 		//Distinctive red-brown sky.
@@ -103,13 +103,14 @@ public class Render implements GLEventListener {
 		long t0 = System.nanoTime();
 		if(!initialLoadScreen)
 		{
-			//DeferredRender.deferredPipeline(gl);
+			GL2DeferredRenderer.deferredPipeline(gl.getGL2());
+			renderDebugScreen(gl.getGL2());
 		}
 		else
 		{
 			Log.info("Preload");
 			assertNoError(gl);
-			preloadScreen(gl);
+			preloadScreen(gl.getGL2());
 			Log.info("Finished preload");
 			assertNoError(gl);
 		}
@@ -144,7 +145,7 @@ public class Render implements GLEventListener {
 
 		long t1 = System.nanoTime()-t0;
 		if(loadData){
-			Client.loadManager.loadData(gl);
+			Client.loadManager.loadData(gl.getGL2());
 			loadData=false;
 		}
 		long t2 = System.nanoTime()-(t1+t0);
@@ -244,7 +245,7 @@ public class Render implements GLEventListener {
 		/**
 		 * Unload resources used by the pipeline 
 		 */
-		//DeferredRender.unload(gl);
+		GL2DeferredRenderer.unload(gl);
 		
 		
 		Log.info("Disposed of OpenGL resources.");
@@ -308,7 +309,7 @@ public class Render implements GLEventListener {
 		
 		
 		
-		//DeferredRender.createBuffers(gl);
+		GL2DeferredRenderer.createBuffers(gl);
 	}
 
 
@@ -320,7 +321,7 @@ public class Render implements GLEventListener {
 
 		Graphics.camera.recalculateProjection();
 
-		//r.reshape(drawable,x,y,width,height);
+		r.reshape(drawable,x,y,width,height);
 	}
 
 	/**

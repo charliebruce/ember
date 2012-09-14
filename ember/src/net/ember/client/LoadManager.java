@@ -68,7 +68,7 @@ public class LoadManager implements Runnable {
 					
 					try {
 						modelsToLoad.add(ModelLoader.get(Filesystem.get("test/unitsphere.mesh"), "unitsphere"));
-						modelsToLoad.add(ModelLoader.get(Filesystem.get("test/hellknight.mesh"), "hellknight"));
+						modelsToLoad.add(ModelLoader.get(Filesystem.get("nonfree/hellknight.mesh"), "hellknight"));
 						modelsToLoad.add(World.regions[0].regionGraphicsMesh);
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block

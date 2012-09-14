@@ -64,7 +64,7 @@ public class GL2DeferredRenderer implements GL2ForwardRenderer {
 	 * also http://www.youtube.com/watch?v=0EjvtQdTHB0&feature=relmfu
 	 * @param gl
 	 */
-	static void deferredPipeline(GL2 gl){
+	public static void deferredPipeline(GL2 gl){
 
 		/**
 		 * First, fill the GBuffer, and on another thread create the PVSes for each dynamic-shadowing light.
@@ -163,11 +163,11 @@ public class GL2DeferredRenderer implements GL2ForwardRenderer {
 		gl.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
 
 		
-		gl.glBindBuffer(GL.GL_ARRAY_BUFFER,  Render.fsvbo);
-		gl.glVertexAttribPointer(Shaders.simpleLightShader.vertexLocation, 2, GL.GL_FLOAT, false, 0,0);//2=xy,0,0/no stride, no offset
-		gl.glEnableVertexAttribArray(Shaders.simpleLightShader.vertexLocation);
+		//gl.glBindBuffer(GL.GL_ARRAY_BUFFER,  Render.fsvbo);
+		//gl.glVertexAttribPointer(Shaders.simpleLightShader.vertexLocation, 2, GL.GL_FLOAT, false, 0,0);//2=xy,0,0/no stride, no offset
+		//gl.glEnableVertexAttribArray(Shaders.simpleLightShader.vertexLocation);
 
-		gl.glDrawArrays(GL.GL_TRIANGLES, 0, 6);
+		//gl.glDrawArrays(GL.GL_TRIANGLES, 0, 6);
 		
 		
 
@@ -184,7 +184,7 @@ public class GL2DeferredRenderer implements GL2ForwardRenderer {
 	
 	
 	
-	static void createBuffers(GL2 gl) {
+	public static void createBuffers(GL2 gl) {
 		int gbufferformat = GL2.GL_RGBA16F;
 		int lightBufferFormat = GL2.GL_RGBA16F;
 		/**
